@@ -1,12 +1,12 @@
 version: '3'
 services:
   smp-api:
-    image: smp:1.0
+    image: smp-api:1.0
     ports:
       - '5000:5000'
-    container_name: 'smp-Container'
+    container_name: 'smp-api-Container'
     restart: always
     networks:
-      - smp
+      - smp-api
 networks:
-  smp:
+  smp-api:

@@ -11,7 +11,7 @@ var sensorRouter = require('./routes/sensor')
 var app = express()
 var cors = require('cors')
 
-var port = process.env.PORT || '5000'
+var port = '5000'
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
