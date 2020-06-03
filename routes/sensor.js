@@ -12,22 +12,24 @@ admin.initializeApp({
 var sensor = []
 var db = admin.database()
 var ref = db.ref('Devices')
-ref.on('value', (snapshot) => {
-  const sensorArr = Object.values(snapshot.val()).map(({ Sensor }) => Sensor)
-
-  const filterSensor = sensorArr.map((sensor) => {
-    if (sensor > 1200) {
-      return 0
-    } else {
-      return 1
-    }
-  })
-  console.log('filterSensor: ', filterSensor)
-  sensor = filterSensor
-})
 
 /* GET page. */
-router.get('/', function (req, res, next) {
+router.get('/:namePlace', function (req, res, next) {
+  const {namePlace} = req.params
+
+  ref.on('value', (snapshot) => {
+    const sensorArr = Object.values(snapshot.val()).map(({Place: {name}, Sensor }) => ({name,Sensor}))
+    const filterSensor = sensorArr.filter((e) => e.name === `${namePlace}` )
+    const setSensor = filterSensor.map((e,i) => {
+     if (e.Sensor > 1200) {
+        return 0
+      } else {
+        return 1
+      }
+    })
+    sensor = setSensor
+  })
+
   res.json(sensor)
 })
 
