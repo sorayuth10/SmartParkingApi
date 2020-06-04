@@ -3,14 +3,21 @@ var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
+var https = require('https');
+var fs = require('fs');
 
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 var sensorRouter = require('./routes/sensor')
 
+var https_options = {
+  key: fs.readFileSync('./ssl/key.pem'),
+  cert: fs.readFileSync('./ssl/cert.pem')
+}
+
 var app = express()
 var cors = require('cors')
-
+var server = https.createServer( https_options , app );
 var port = '5000'
 
 // view engine setup
@@ -33,8 +40,8 @@ app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/sensor', sensorRouter)
 
-app.listen(port, () => {
-  console.log(`Server listening on port : ${port}`)
+server.listen(port, () => {
+  console.log(`Server listening on port : ${server.address().port}`)
 })
 
 // catch 404 and forward to error handler
